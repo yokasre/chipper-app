@@ -2,7 +2,6 @@
 
 const {$api} = useNuxtApp()
 const {showErrorModal} = useHelpers()
-const postsStore = usePostsStore()
 
 const postData = reactive({
   title: '',
@@ -16,7 +15,6 @@ async function submit() {
 
   try {
     const post = await $api.post('/posts', postData)
-    postsStore.addPost(post)
     clearForm()
   } catch (e) {
     showErrorModal(e)
