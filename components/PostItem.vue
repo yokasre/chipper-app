@@ -76,6 +76,9 @@ const removePostToFavorites = async (postID) => {
     <p>
       {{ post.body }}
     </p>
+
+    <img :src="post.image" :alt="post.title" v-if="post.image">
+
     <div v-if="!user.isGuest">
       <button class="bg-red-200 text-red-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-if="postFavoritedByUser" @click="removePostToFavorites(post.id)">
         <TrashIcon
