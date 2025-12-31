@@ -7,6 +7,7 @@ const { $api } = useNuxtApp()
 const user = useUser()
 
 const { data: posts } = await $api.get('posts')
+const { data: favorites } = await $api.get('favorites')
 </script>
 
 <template>
@@ -16,6 +17,6 @@ const { data: posts } = await $api.get('posts')
     <PostItem
       v-for="post in posts"
       :key="post.id"
-      v-bind="{ post }" />
+      v-bind="{ post, authorFollowedByUser: favorites.users.some(user => user.id === post.user.id) }" />
   </div>
 </template>
