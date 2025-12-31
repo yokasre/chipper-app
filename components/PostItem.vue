@@ -1,5 +1,5 @@
 <script setup>
-import {HeartIcon} from '@heroicons/vue/24/outline'
+import {HeartIcon, TrashIcon} from '@heroicons/vue/24/outline'
 
 defineProps({
   post: {
@@ -7,6 +7,10 @@ defineProps({
     required: true
   },
   authorFollowedByUser: {
+    type: Boolean,
+    default: false
+  },
+  postFavoritedByUser: {
     type: Boolean,
     default: false
   }
@@ -27,6 +31,22 @@ const followAuthor = async (authorID) => {
 const unFollowAuthor = async (authorID) => {
   try {
     await $api.delete(`/users/${authorID}/favorite`)
+  } catch (e) {
+    showErrorModal(e)
+  }
+}
+
+const addPostToFavorites = async (postID) => {
+  try {
+    await $api.post(`/posts/${postID}/favorite`)
+  } catch (e) {
+    showErrorModal(e)
+  }
+}
+
+const removePostToFavorites = async (postID) => {
+  try {
+    await $api.delete(`/posts/${postID}/favorite`)
   } catch (e) {
     showErrorModal(e)
   }
@@ -56,7 +76,15 @@ const unFollowAuthor = async (authorID) => {
     <p>
       {{ post.body }}
     </p>
-    <button class="bg-red-200 text-red-500 flex items-center justify-center gap-2 p-4 rounded-lg">
+    <button class="bg-red-200 text-red-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-if="postFavoritedByUser" @click="removePostToFavorites(post.id)">
+      <TrashIcon
+          class="h-6 stroke-current"/>
+      <span class="font-bold">
+        Remove from favorites
+      </span>
+    </button>
+
+    <button class="bg-green-200 text-green-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-else @click="addPostToFavorites(post.id)">
       <HeartIcon
           class="h-6 stroke-current"/>
       <span class="font-bold">
