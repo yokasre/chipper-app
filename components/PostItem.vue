@@ -63,7 +63,7 @@ const removePostToFavorites = async (postID) => {
         by <strong>{{ post.user.name }}</strong>
       </div>
 
-      <div v-if="(post.user.id !== user.data.id)">
+      <div v-if="!user.isGuest && (post.user.id !== user.data.id)">
         <button class="font-medium bg-blue-200 text-sm px-2 rounded-full" @click="unFollowAuthor(post.user.id)" v-if="authorFollowedByUser">
           Unfollow
         </button>
@@ -76,20 +76,22 @@ const removePostToFavorites = async (postID) => {
     <p>
       {{ post.body }}
     </p>
-    <button class="bg-red-200 text-red-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-if="postFavoritedByUser" @click="removePostToFavorites(post.id)">
-      <TrashIcon
-          class="h-6 stroke-current"/>
-      <span class="font-bold">
+    <div v-if="!user.isGuest">
+      <button class="bg-red-200 text-red-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-if="postFavoritedByUser" @click="removePostToFavorites(post.id)">
+        <TrashIcon
+            class="h-6 stroke-current"/>
+        <span class="font-bold">
         Remove from favorites
       </span>
-    </button>
+      </button>
 
-    <button class="bg-green-200 text-green-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-else @click="addPostToFavorites(post.id)">
-      <HeartIcon
-          class="h-6 stroke-current"/>
-      <span class="font-bold">
+      <button class="bg-green-200 text-green-500 flex items-center justify-center gap-2 p-4 rounded-lg" v-else @click="addPostToFavorites(post.id)">
+        <HeartIcon
+            class="h-6 stroke-current"/>
+        <span class="font-bold">
         Add to my favorites
       </span>
-    </button>
+      </button>
+    </div>
   </div>
 </template>
